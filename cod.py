@@ -1,0 +1,19 @@
+from tensorflow.keras.datasets import fashion_mnist
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.models import Sequential
+
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
+
+x_train = x_train/255
+x_test = x_test/255
+model = Sequential([
+    Flatten(input_shape=(28,28)),
+    Dense(128, activation='relu'),
+    Dense(10, activation='softmax')
+])
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model.fit(x_train, y_train, epochs=5, batch_size=32, validation_data=(x_test, y_test))
+test_loss, test_acc = model.evaluate(x_test, y_test)
+print("Model accuracy:", test_acc)
+
+model.save("sparkle.h5")
